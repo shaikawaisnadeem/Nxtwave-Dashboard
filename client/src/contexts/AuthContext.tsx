@@ -1,8 +1,16 @@
+<<<<<<< Updated upstream
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import type { UserProfile, UserRole } from "@/types/domain";
 import { fetchUserProfile, upsertUserProfile } from "@/services/userService";
+=======
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import type { Session } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
+import type { UserProfile, UserRole } from '@/types/domain';
+import { fetchUserProfile, upsertUserProfile } from '@/services/userService';
+>>>>>>> Stashed changes
 
 interface SignUpPayload {
   name: string;
@@ -49,7 +57,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     (async () => {
       const { data, error } = await supabase.auth.getSession();
       if (error) {
+<<<<<<< Updated upstream
         console.error("[supabase] getSession error", error);
+=======
+        console.error('[supabase] getSession error', error);
+>>>>>>> Stashed changes
       }
       if (!isMounted) return;
       setSession(data.session ?? null);
@@ -111,7 +123,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signOut = useCallback(async () => {
+<<<<<<< Updated upstream
     await supabase.auth.signOut({ scope: "local" });
+=======
+    await supabase.auth.signOut({ scope: 'local' });
+>>>>>>> Stashed changes
     setSession(null);
     setProfile(null);
   }, []);
@@ -124,13 +140,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const completeProfile = useCallback(
     async ({ name, role, productId, departmentId }: CompleteProfilePayload) => {
       if (!session?.user) {
+<<<<<<< Updated upstream
         throw new Error("No active session");
+=======
+        throw new Error('No active session');
+>>>>>>> Stashed changes
       }
 
       const result = await upsertUserProfile({
         authUserId: session.user.id,
         name,
+<<<<<<< Updated upstream
         email: session.user.email ?? "",
+=======
+        email: session.user.email ?? '',
+>>>>>>> Stashed changes
         role,
         productId,
         departmentId,

@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 type Mode = "signin" | "signup";
 
 export default function Login() {
+<<<<<<< Updated upstream
   const [mode, setMode] = useState<Mode>("signin");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,6 +23,28 @@ export default function Login() {
   useEffect(() => {
     if (session) {
       navigate(needsOnboarding ? "/onboarding" : "/");
+=======
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const { signIn, signUp, session, needsOnboarding } = useAuth();
+  const [, setLocation] = useLocation();
+
+  // Redirect if already logged in and profile is complete
+  if (session && !needsOnboarding) {
+    setLocation('/');
+    return null;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email || !password || (!isLoginMode && !fullName)) {
+      toast.error('Please fill in all required fields');
+      return;
+>>>>>>> Stashed changes
     }
   }, [session, needsOnboarding, navigate]);
 
@@ -30,6 +53,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
+<<<<<<< Updated upstream
       if (!email || !password) {
         toast.error("Email and password are required.");
         return;
@@ -56,6 +80,20 @@ export default function Login() {
       }
     } catch (error: any) {
       toast.error(error.message || "Authentication failed. Please try again.");
+=======
+      if (isLoginMode) {
+        await signIn(email, password);
+        toast.success('Login successful!');
+      } else {
+        await signUp({ email, password, name: fullName });
+        toast.success('Signup successful! Please complete your profile.');
+        // Supabase automatically redirects to onboarding if profile is not complete
+      }
+      // Redirection is handled by AuthContext and App.tsx
+    } catch (error: any) {
+      console.error('Auth error:', error);
+      toast.error(error.message || 'Authentication failed. Please check your credentials.');
+>>>>>>> Stashed changes
     } finally {
       setIsLoading(false);
     }
@@ -68,6 +106,7 @@ export default function Login() {
           <div className="mx-auto w-fit rounded-full bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
             NxtWave Workflow
           </div>
+<<<<<<< Updated upstream
           <CardTitle className="text-3xl font-semibold text-foreground">
             {mode === "signin" ? "Secure Login" : "Create Your Account"}
           </CardTitle>
@@ -75,10 +114,16 @@ export default function Login() {
             {mode === "signin"
               ? "Use your corporate credentials to access the workflow and analytics console."
               : "Set up your account to begin onboarding into the NxtWave hierarchy."}
+=======
+          <CardTitle className="text-2xl">{isLoginMode ? 'Welcome Back' : 'Join NxtWave'}</CardTitle>
+          <CardDescription>
+            {isLoginMode ? 'Enter your credentials to access the workflow dashboard' : 'Create your account to get started'}
+>>>>>>> Stashed changes
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
+<<<<<<< Updated upstream
             {mode === "signup" && (
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
@@ -95,6 +140,23 @@ export default function Login() {
               </div>
             )}
 
+=======
+            {!isLoginMode && (
+              <div className="space-y-2">
+                <Label htmlFor="full-name">Full Name</Label>
+                <Input
+                  id="full-name"
+                  type="text"
+                  placeholder="Your Full Name"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  disabled={isLoading}
+                  data-testid="input-full-name"
+                  required
+                />
+              </div>
+            )}
+>>>>>>> Stashed changes
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -108,6 +170,7 @@ export default function Login() {
                 required
               />
             </div>
+<<<<<<< Updated upstream
 
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
@@ -121,6 +184,42 @@ export default function Login() {
                 disabled={isLoading}
                 required
               />
+=======
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+                data-testid="input-password"
+                required
+              />
+            </div>
+
+            <Button
+              type="submit"
+              variant="default"
+              className="w-full"
+              disabled={isLoading}
+              data-testid="button-auth"
+            >
+              {isLoading ? (isLoginMode ? 'Logging in...' : 'Signing up...') : (isLoginMode ? 'Login' : 'Sign Up')}
+            </Button>
+
+            <div className="mt-6 pt-6 border-t border-gray-200 text-center">
+              <Button
+                variant="link"
+                type="button"
+                onClick={() => setIsLoginMode(!isLoginMode)}
+                disabled={isLoading}
+                data-testid="button-toggle-mode"
+              >
+                {isLoginMode ? 'Need an account? Sign Up' : 'Already have an account? Login'}
+              </Button>
+>>>>>>> Stashed changes
             </div>
 
             {mode === "signup" && (
